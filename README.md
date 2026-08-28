@@ -1,3 +1,8 @@
+---
+license: mit
+language:
+- en
+---
 # Neuralese Translator
 
 A neural network designed to translate this particular neuralese language into english.
