@@ -2,7 +2,7 @@
 name: b72-o200k
 description: Use B72 compact bytecode with o200k_base models.
 version: 0.1.0
-author: Axel, Hermes Agent
+author: AGGG, Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
 ---
