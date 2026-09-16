@@ -20,19 +20,18 @@ API provider, a hidden chain-of-thought channel, Python, or tool access.
 
 ## Hard Output Boundary
 
-Use B72 for internal reasoning state, intermediate tool plans, structured
-model-to-model messages, and machine-facing payloads. Agents may emit raw B72
-in clearly marked intermittent progress or tool-planning messages so protocol
-use can be observed. Before sending a final answer to a human, decode all B72
+Use B72 silently for internal reasoning state, intermediate tool plans,
+structured model-to-model messages, and machine-facing payloads. Do not narrate
+that B72 is being used, do not print protocol status, and do not prepend a B72
+marker to any message. Before sending a final answer to a human, decode all B72
 content and write the result in the user's normal language. Never emit raw
 `B72`, compact opcodes, or codebook atoms in a final answer unless the user
 explicitly requests the wire representation.
 
-If an agent has no private reasoning channel, use a clearly labeled intermittent
-message such as `B72-INTERMEDIATE: <wire>` for task state or tool planning.
-Never use that label for the final answer. If the host suppresses intermittent
-messages, keep B72 in an internal variable, local scratchpad, system/developer
-instruction, or agent-to-agent message instead.
+If an agent has no private reasoning channel, keep B72 in an internal variable,
+local scratchpad, system/developer instruction, or agent-to-agent message. If
+the host cannot provide any non-user-visible state, use ordinary structured
+text rather than falsely claiming that B72 was applied.
 
 ## Cross-Agent Interoperability
 
@@ -42,14 +41,6 @@ Every compatible agent must implement the same four operations:
 2. **Encode** structured state into B72-o200k compact wire text.
 3. **Decode** wire text into an ordered tree without guessing.
 4. **Render** decoded state as ordinary natural language for final output.
-
-Intermittent example:
-
-```text
-B72-INTERMEDIATE: B72 ( A q E ( X aa V zx ) )
-```
-
-Final output must contain only the decoded meaning, not this wire text.
 
 Protocol setup may be supplied through a system prompt, developer prompt,
 initialization message, configuration file, or side-channel agreed by the
