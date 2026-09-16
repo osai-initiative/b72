@@ -20,18 +20,21 @@ API provider, a hidden chain-of-thought channel, Python, or tool access.
 
 ## Hard Output Boundary
 
-Use B72 silently for internal reasoning state, intermediate tool plans,
-structured model-to-model messages, and machine-facing payloads. Do not narrate
-that B72 is being used, do not print protocol status, and do not prepend a B72
-marker to any message. Before sending a final answer to a human, decode all B72
-content and write the result in the user's normal language. Never emit raw
-`B72`, compact opcodes, or codebook atoms in a final answer unless the user
-explicitly requests the wire representation.
+Use B72 for internal reasoning state, intermediate tool plans, structured
+model-to-model messages, and machine-facing payloads. When emitting an
+intermediate progress or tool-planning message, show the raw B72 wire text on
+its own line. Do not prepend a label or marker such as `B72-INTERMEDIATE:`.
+Before sending a final answer to a human, decode all B72 content and write the
+result in the user's normal language. Never emit raw `B72`, compact opcodes, or
+codebook atoms in a final answer unless the user explicitly requests the wire
+representation.
 
-If an agent has no private reasoning channel, keep B72 in an internal variable,
-local scratchpad, system/developer instruction, or agent-to-agent message. If
-the host cannot provide any non-user-visible state, use ordinary structured
-text rather than falsely claiming that B72 was applied.
+If an agent has no private reasoning channel, use its ordinary intermittent
+progress channel for the raw B72 line. If the host suppresses intermittent
+messages, keep B72 in an internal variable, local scratchpad,
+system/developer instruction, or agent-to-agent message. If the host cannot
+provide either, use ordinary structured text rather than falsely claiming that
+B72 was applied.
 
 ## Cross-Agent Interoperability
 
